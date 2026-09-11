@@ -1,0 +1,56 @@
+@startuml add-product-to-cart
+actor User
+participant "CartV1Controller" as Presentation
+participant "ICartService" as Control
+participant "CartMediator" as Mediator
+database "CartRepository / ProductRepository" as Foundation
+
+User -> Presentation : POST /api/v1/cart/items
+Presentation -> Control : addItem(userId, productId, quantity)
+Control -> Mediator : addItem(...)
+Mediator -> Foundation : load cart and active product
+Foundation --> Mediator : Cart, SoftwareProduct
+Mediator -> Foundation : save CartItem
+Mediator --> Presentation : CartResponse
+Presentation --> User : 201 Created
+@enduml
+
+@startuml create-order
+actor User
+participant "OrderV1Controller" as Presentation
+participant "IOrderService" as Control
+participant "CheckoutFacade" as Mediator
+database "CartRepository / OrderRepository" as Foundation
+
+User -> Presentation : POST /api/v1/orders
+Presentation -> Control : createFromCart(email)
+Control -> Mediator : createFromCart(email)
+Mediator -> Foundation : load user and cart
+Mediator -> Mediator : validate active products\ncalculate server total
+Mediator -> Foundation : save PENDING_PAYMENT order
+Mediator -> Mediator : clear cart
+Mediator --> Presentation : OrderResponse
+Presentation --> User : 201 Created
+@enduml
+
+@startuml pay-order-and-generate-license
+actor User
+participant "OrderV1Controller" as Presentation
+participant "IOrderService" as Control
+participant "CheckoutFacade" as Mediator
+participant "IPaymentService" as Payment
+participant "ILicenseService" as License
+database "Repositories" as Foundation
+
+User -> Presentation : POST /api/v1/orders/{id}/pay
+Presentation -> Control : pay(email, id)
+Control -> Mediator : pay(email, id)
+Mediator -> Foundation : load owned PENDING_PAYMENT order
+Mediator -> Payment : process(order, amount)
+Payment -> Foundation : save Payment(SUCCESS)
+Mediator -> License : issueFor(order)
+License -> Foundation : save licenses per quantity
+Mediator -> Foundation : save Order(COMPLETED)
+Mediator --> Presentation : OrderResponse
+Presentation --> User : 200 OK
+@enduml

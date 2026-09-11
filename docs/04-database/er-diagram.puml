@@ -1,0 +1,85 @@
+@startuml
+hide circle
+skinparam linetype ortho
+
+entity users {
+  * id : uuid <<PK>>
+  --
+  email : varchar(254) <<UQ>>
+  password_hash : varchar(72)
+  role : varchar(20)
+  created_at : timestamp
+}
+entity categories {
+  * id : uuid <<PK>>
+  --
+  name : varchar(120) <<UQ>>
+  description : varchar(1000)
+}
+entity software_products {
+  * id : uuid <<PK>>
+  --
+  category_id : uuid <<FK>>
+  name : varchar(160)
+  price : numeric(12,2)
+  status : varchar(20)
+}
+entity carts {
+  * id : uuid <<PK>>
+  --
+  user_id : uuid <<FK, UQ>>
+  created_at : timestamp
+  updated_at : timestamp
+}
+entity cart_items {
+  * id : uuid <<PK>>
+  --
+  cart_id : uuid <<FK>>
+  product_id : uuid <<FK>>
+  quantity : integer
+}
+entity orders {
+  * id : uuid <<PK>>
+  --
+  user_id : uuid <<FK>>
+  status : varchar(20)
+  total_amount : numeric(12,2)
+}
+entity order_items {
+  * id : uuid <<PK>>
+  --
+  order_id : uuid <<FK>>
+  product_id : uuid <<FK>>
+  quantity : integer
+  unit_price : numeric(12,2)
+}
+entity payments {
+  * id : uuid <<PK>>
+  --
+  order_id : uuid <<FK>>
+  transaction_id : varchar(100) <<UQ>>
+  amount : numeric(12,2)
+  status : varchar(20)
+}
+entity licenses {
+  * id : uuid <<PK>>
+  --
+  user_id : uuid <<FK>>
+  product_id : uuid <<FK>>
+  order_id : uuid <<FK>>
+  license_key : varchar(64) <<UQ>>
+  status : varchar(20)
+}
+
+users ||--o| carts
+users ||--o{ orders
+users ||--o{ licenses
+categories ||--o{ software_products
+carts ||--o{ cart_items
+software_products ||--o{ cart_items
+orders ||--o{ order_items
+software_products ||--o{ order_items
+orders ||--o{ payments
+orders ||--o{ licenses
+software_products ||--o{ licenses
+@enduml

@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/software_store}
+    username: ${SPRING_DATASOURCE_USERNAME:software_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:software_pass}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+server:
+  port: 8080
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:change-this-secret-to-at-least-32-characters-long-12345}
+    expiration-ms: 86400000

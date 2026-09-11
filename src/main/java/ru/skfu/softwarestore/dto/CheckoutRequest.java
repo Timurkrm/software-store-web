@@ -1,0 +1,1 @@
+package ru.skfu.softwarestore.dto; import jakarta.validation.constraints.*; import java.util.*; public record CheckoutRequest(@NotEmpty List<Item> items){public record Item(@NotNull UUID productId,@Min(1) @Max(99) int quantity){}}

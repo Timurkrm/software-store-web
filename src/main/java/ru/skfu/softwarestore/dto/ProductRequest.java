@@ -1,0 +1,1 @@
+package ru.skfu.softwarestore.dto; import jakarta.validation.constraints.*; import java.math.BigDecimal; public record ProductRequest(@NotBlank String name,@NotBlank String vendor,@NotBlank String description,@NotNull @Positive BigDecimal price,@NotBlank String version,String imageUrl,@NotBlank String category){}

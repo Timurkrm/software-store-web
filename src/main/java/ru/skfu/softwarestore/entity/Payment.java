@@ -1,0 +1,4 @@
+package ru.skfu.softwarestore.entity;
+import jakarta.persistence.*; import lombok.*; import org.hibernate.annotations.Check; import java.math.BigDecimal; import java.time.LocalDateTime; import java.util.UUID;
+@Entity @Table(name="payments") @Check(constraints="amount >= 0") @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class Payment { @Id @GeneratedValue(strategy=GenerationType.UUID) private UUID id; @ManyToOne(fetch=FetchType.LAZY,optional=false) @JoinColumn(name="order_id",nullable=false) private Order order; @Column(name="transaction_id",unique=true,length=100) private String transactionId; @Column(nullable=false,precision=12,scale=2) private BigDecimal amount; @Enumerated(EnumType.STRING) @Column(nullable=false,length=20) private PaymentStatus status; @Builder.Default @Column(name="created_at",nullable=false,updatable=false) private LocalDateTime createdAt=LocalDateTime.now(); }

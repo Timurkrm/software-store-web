@@ -1,0 +1,78 @@
+@startuml
+skinparam packageStyle rectangle
+package Presentation {
+  class AuthController
+  class ProductV1Controller
+  class CategoryV1Controller
+  class CartV1Controller
+  class OrderV1Controller
+  class LicenseV1Controller
+  class AdminOrderV1Controller
+}
+package Control {
+  interface IUserService
+  interface IProductService
+  interface ICategoryService
+  interface ICartService
+  interface IOrderService
+  interface ILicenseService
+  interface IPaymentService
+}
+package Mediator {
+  class UserMediator
+  class ProductMediator
+  class CategoryMediator
+  class CartMediator
+  class CheckoutFacade
+  class PaymentMediator
+  class LicenseMediator
+}
+package Entity {
+  class User
+  class Category
+  class SoftwareProduct
+  class Cart
+  class CartItem
+  class Order
+  class OrderItem
+  class Payment
+  class License
+}
+package Foundation {
+  interface UserRepository
+  interface ProductRepository
+  interface CategoryRepository
+  interface CartRepository
+  interface OrderRepository
+  interface PaymentRepository
+  interface LicenseRepository
+}
+AuthController --> IUserService
+ProductV1Controller --> IProductService
+CategoryV1Controller --> ICategoryService
+CartV1Controller --> ICartService
+OrderV1Controller --> IOrderService
+LicenseV1Controller --> ILicenseService
+AdminOrderV1Controller --> IOrderService
+IUserService <|.. UserMediator
+IProductService <|.. ProductMediator
+ICategoryService <|.. CategoryMediator
+ICartService <|.. CartMediator
+IOrderService <|.. CheckoutFacade
+IPaymentService <|.. PaymentMediator
+ILicenseService <|.. LicenseMediator
+UserMediator --> UserRepository
+ProductMediator --> ProductRepository
+CategoryMediator --> CategoryRepository
+CartMediator --> CartRepository
+CheckoutFacade --> OrderRepository
+PaymentMediator --> PaymentRepository
+LicenseMediator --> LicenseRepository
+UserRepository --> User
+ProductRepository --> SoftwareProduct
+CategoryRepository --> Category
+CartRepository --> Cart
+OrderRepository --> Order
+PaymentRepository --> Payment
+LicenseRepository --> License
+@enduml

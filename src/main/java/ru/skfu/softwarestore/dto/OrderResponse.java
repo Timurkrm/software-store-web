@@ -1,0 +1,1 @@
+package ru.skfu.softwarestore.dto; import java.math.BigDecimal; import java.time.LocalDateTime; import java.util.*; public record OrderResponse(UUID id,String status,BigDecimal totalAmount,String currency,LocalDateTime createdAt,List<Line> items){public record Line(UUID productId,String productName,int quantity,BigDecimal unitPrice){}}

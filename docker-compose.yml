@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-software_store}
+      POSTGRES_USER: ${POSTGRES_USER:-software_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-software_pass}
+    ports: ["${POSTGRES_PORT:-5432}:5432"]
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  app:
+    build: .
+    ports: ["${APP_PORT:-8080}:8080"]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-software_store}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-software_user}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-software_pass}
+      APP_JWT_SECRET: ${APP_JWT_SECRET:-change-this-secret-to-at-least-32-characters-long-12345}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      APP_SEED_ADMIN_EMAIL: ${APP_SEED_ADMIN_EMAIL:-}
+      APP_SEED_ADMIN_PASSWORD: ${APP_SEED_ADMIN_PASSWORD:-}
+    depends_on:
+      db: {condition: service_healthy}
+volumes:
+  postgres_data:

@@ -1,0 +1,16 @@
+@startgantt
+Project starts 2026-02-02
+-- Анализ и проектирование --
+[Анализ требований] lasts 10 days
+[PCMEF и модель данных] starts at [Анализ требований]'s end and lasts 12 days
+[Flyway и PostgreSQL] starts at [PCMEF и модель данных]'s start and lasts 14 days
+-- Реализация --
+[Backend и REST API] starts at [PCMEF и модель данных]'s end and lasts 24 days
+[Web UI] starts at [Backend и REST API]'s start and lasts 18 days
+[Security] starts at [Backend и REST API]'s start and lasts 14 days
+-- Контроль качества и поставка --
+[Тестирование] starts at [Backend и REST API]'s end and lasts 12 days
+[Рефакторинг и quality checks] starts at [Тестирование]'s start and lasts 10 days
+[WAR и Docker] starts at [Тестирование]'s end and lasts 8 days
+[Документация и финальная проверка] starts at [WAR и Docker]'s start and lasts 10 days
+@endgantt

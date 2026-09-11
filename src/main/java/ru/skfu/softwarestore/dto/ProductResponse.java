@@ -1,0 +1,1 @@
+package ru.skfu.softwarestore.dto; import java.math.BigDecimal; import java.util.UUID; public record ProductResponse(UUID id,String name,String vendor,String description,BigDecimal price,String currency,String version,String imageUrl,String category){}
